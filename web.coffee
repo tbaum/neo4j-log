@@ -28,15 +28,17 @@ s = new MyApp()
 
 console.log process.env
 
+uri = 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006'
 
-neo4j = require('neo4j')
-db = new neo4j.GraphDatabase('http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006')
+Schema = require('jugglingdb').Schema;
+s = new Schema('neo4j',{url:uri});
 
-print = (err, res)->
-    console.log(err + (res && res.self) + res)
-node = db.createNode {hello: 'world'}
-node.save print
-node = db.getNodeById 1, print
-rel = db.getRelationshipById 1, print
+# neo4j = require('neo4j')
+
+#print = (err, res)->   console.log(err + (res && res.self) + res)
+#node = db.createNode {hello: 'world'}
+#node.save print
+#node = db.getNodeById 1, print
+#rel = db.getRelationshipById 1, print
 
 

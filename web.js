@@ -1,5 +1,5 @@
 (function() {
-  var MyApp, connect, db, http, neo4j, node, print, rel, s;
+  var MyApp, Schema, connect, http, s, uri;
 
   connect = require('connect');
 
@@ -35,22 +35,12 @@
 
   console.log(process.env);
 
-  neo4j = require('neo4j');
+  uri = 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006';
 
-  db = new neo4j.GraphDatabase('http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006');
+  Schema = require('jugglingdb').Schema;
 
-  print = function(err, res) {
-    return console.log(err + (res && res.self) + res);
-  };
-
-  node = db.createNode({
-    hello: 'world'
+  s = new Schema('neo4j', {
+    url: uri
   });
-
-  node.save(print);
-
-  node = db.getNodeById(1, print);
-
-  rel = db.getRelationshipById(1, print);
 
 }).call(this);
