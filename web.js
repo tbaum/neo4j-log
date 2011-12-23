@@ -1,5 +1,5 @@
 (function() {
-  var MyApp, connect, db, http, login, neo, node, pass, print, s, url;
+  var MyApp, connect, db, http, login, neo, pass, print, s, url;
 
   connect = require('connect');
 
@@ -30,8 +30,19 @@
           response.setHeader('Content-Type', 'image/gif');
           return response.end("\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00" + "\x00\x00\x00\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00\x00" + "\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3b", 'binary');
         });
-        return app.get('/debug', function(request, response) {
+        app.get('/debug', function(request, response) {
           return response.end(JSON.stringify(res));
+        });
+        return app.get('/test', function(request, response) {
+          var node;
+          node = db.getNodeById(1, function(err, node) {
+            console.log(node);
+            return node.index("id1", "hello", "world", function(err, id) {
+              console.log(err);
+              return console.id;
+            });
+          });
+          return response.end("OK");
         });
       }), connect.static(__dirname + '/public'));
       app.listen(process.env.PORT || 3000);
@@ -47,13 +58,6 @@
     print = function(err, res) {
       return console.log(err || (res && res.self) || res);
     };
-    node = db.getNodeById(1, function(err, node) {
-      console.log(node);
-      return node.index("id1", "hello", "world", function(err, id) {
-        console.log(err);
-        return console.id;
-      });
-    });
   }
 
 }).call(this);

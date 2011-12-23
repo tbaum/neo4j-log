@@ -29,6 +29,13 @@ class MyApp
 								 "\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3b", 'binary'
 				app.get '/debug', (request, response) ->
 					response.end JSON.stringify(res)
+				app.get '/test', (request,response) ->
+					node = db.getNodeById 1, (err,node) ->
+						console.log node
+						node.index "id1","hello","world", (err,id) ->
+							console.log err
+							console.id
+					response.end "OK"
 			connect.static(__dirname + '/public')
 		)
 
@@ -56,11 +63,6 @@ if (1<2)
 #	node = db.createNode({hello: 'world'})
 #	node.save(print)
 
-	node = db.getNodeById 1, (err,node) ->
-		console.log node
-		node.index "id1","hello","world", (err,id) ->
-			console.log err
-			console.id
 
 #	rel = db.getRelationshipById(1, print)
 
