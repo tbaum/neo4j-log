@@ -1,16 +1,35 @@
 (function() {
-  var connect;
+  var MyApp, connect, s;
 
   connect = require('connect');
 
-  connect(connect.router(function(app) {
-    return app.get('/', function(request, response) {
+  MyApp = (function() {
+
+    function MyApp() {
       var res;
-      res = {
-        ok: 'for-me'
+      res = {};
+      this.res = function() {
+        return {
+          res: res
+        };
       };
-      return response.end(JSON.stringify(res));
-    });
-  })).listen(process.env.PORT || 3000);
+      connect(connect.router(function(app) {
+        app.get('/l', function(request, response) {
+          res['last'] = JSON.stringify(request.header);
+          res['url'] = request.url;
+          res['originalUrl'] = request.originalUrl;
+          return response.end("OK");
+        });
+        return app.get('/', function(request, response) {
+          return response.end(JSON.stringify(res));
+        });
+      })).listen(process.env.PORT || 3000);
+    }
+
+    return MyApp;
+
+  })();
+
+  s = new MyApp();
 
 }).call(this);
