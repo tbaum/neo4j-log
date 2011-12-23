@@ -10,7 +10,7 @@ class MyApp
 			connect.router (app) ->
 				app.get '/l', (request, response) ->
 					res['query'] = request.query
-					res['last'] = request.header
+					res['header'] = request.header
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
 					response.setHeader('Content-Type', 'image/gif');
