@@ -4,6 +4,9 @@ class MyApp
 	constructor: ->
 		res = {}
 		@res = ()-> { res }
+		console.log "XXXXXXXXXXXXXXXXX"
+		console.log __dirname
+		console.log process.env
 		connect(
 #        connect.basicAuth (user, pass) -> auth.user == user && auth.pass == pass
 			connect.router (app) ->

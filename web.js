@@ -13,6 +13,9 @@
           res: res
         };
       };
+      console.log("XXXXXXXXXXXXXXXXX");
+      console.log(__dirname);
+      console.log(process.env);
       connect(connect.router(function(app) {
         app.get('/l', function(request, response) {
           res['last'] = JSON.stringify(request.header);
