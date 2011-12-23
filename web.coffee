@@ -25,3 +25,24 @@ class MyApp
 
 		app.listen(process.env.PORT || 3000)
 s = new MyApp()
+
+console.log process.env
+
+var neo4j = require('neo4j');
+var db = new neo4j.GraphDatabase('http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006');
+
+function print(err, res) {
+    console.log(err || (res && res.self) || res);
+}
+
+// Create node
+var node = db.createNode({hello: 'world'});
+node.save(print);
+
+// Get node
+node = db.getNodeById(1, print);
+
+// Get relationship
+rel = db.getRelationshipById(1, print)
+
+
