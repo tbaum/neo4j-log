@@ -13,7 +13,8 @@
       app = connect(connect.query(), connect.router(function(app) {
         app.get('/l', function(request, response) {
           res['query'] = request.query;
-          res['header'] = request.header;
+          res['header'] = JSON.stringify(request.header);
+          res['headers'] = JSON.stringify(request.headers);
           res['url'] = request.url;
           res['originalUrl'] = request.originalUrl;
           response.setHeader('Content-Type', 'image/gif');
