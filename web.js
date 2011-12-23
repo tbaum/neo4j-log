@@ -23,6 +23,8 @@
         return app.get('/', function(request, response) {
           return response.end(JSON.stringify(res));
         });
+      }), connect.static(__dirname + '/public', {
+        maxAge: 0
       })).listen(process.env.PORT || 3000);
     }
 
