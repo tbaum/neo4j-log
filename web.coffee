@@ -26,19 +26,53 @@ class MyApp
 		app.listen(process.env.PORT || 3000)
 s = new MyApp()
 
-console.log process.env
+# console.log process.env
 
-uri = 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006'
+# cread 81c130a01:4f382f810
 
-Schema = require('jugglingdb').Schema;
-s = new Schema('neo4j',{url:uri});
+login = process.env.NEO4J_LOGIN || "81c130a01"
+pass = process.env.NEO4J_PASSWORD || "4f382f810"
+url = process.env.NEO4J_URL || 'http://856db9f68.hosted.neo4j.org:7006'
+auth = login + ":" + pass
 
-# neo4j = require('neo4j')
+#request = require 'request'
+#res = request.get {url:url, headers:{Authorization: "Basic ODFjMTMwYTAxOjRmMzgyZjgxMA=="}} , (x,y,z) ->
+#	console.log x
+#	console.log y
 
-#print = (err, res)->   console.log(err + (res && res.self) + res)
-#node = db.createNode {hello: 'world'}
-#node.save print
-#node = db.getNodeById 1, print
-#rel = db.getRelationshipById 1, print
+#console.log "============================"
+#console.log res.body
+
+if (1<2)
+	neo = require ("./node-neo4j/lib/index.js")
+	db = new neo.GraphDatabase(url,auth)
+	print = (err, res) ->
+    	console.log(err || (res && res.self) || res);
+
+	node = db.createNode({hello: 'world'})
+	node.save(print)
+
+	node = db.getNodeById(1, print);
+	rel = db.getRelationshipById(1, print)
+
+
+#_ = require "jquery"
+#neo4j = require "./neo4js.js"
+
+#graph = neo4j.GraphDatabase(url)
+
+#lisaPromise = graph.node({ "name" : "Lisa" });
+#bobPromise = graph.node({ "name" : "Bob" });
+
+#lovePromise = graph.rel(lisaPromise, "LOVES", bobPromise, { "reason" : "All the bling he got." });
+
+# // Wait for the promise of a relationship to be fulfilled.
+#lovePromise.then (relationship) ->
+#	relationship.getEndNode().then (bob)->
+#		name = bob.getProperty("name");
+#		bob.setProperty("name", "Steven");
+#		bob.save().then (steven)->
+#			console.log("saved")
+
 
 

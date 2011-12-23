@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "dependencies": {
     "connect": "1.8.5",
-    "jugglingdb": "0.0.7",
     "coffee-script": "1.2.0",
-	"streamline": "0.2.1",
-	"http-status": "0.1.1",
-	"request":"2.2.9"
+    "http-status": "0.1.0",
+    "request": "2.1.x",
+    "streamline": "0.1.43"
+    
   }
 }

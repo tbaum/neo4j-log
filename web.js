@@ -1,5 +1,5 @@
 (function() {
-  var MyApp, Schema, connect, http, s, uri;
+  var MyApp, auth, connect, db, http, login, neo, node, pass, print, rel, s, url;
 
   connect = require('connect');
 
@@ -33,14 +33,26 @@
 
   s = new MyApp();
 
-  console.log(process.env);
+  login = process.env.NEO4J_LOGIN || "81c130a01";
 
-  uri = 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006';
+  pass = process.env.NEO4J_PASSWORD || "4f382f810";
 
-  Schema = require('jugglingdb').Schema;
+  url = process.env.NEO4J_URL || 'http://856db9f68.hosted.neo4j.org:7006';
 
-  s = new Schema('neo4j', {
-    url: uri
-  });
+  auth = login + ":" + pass;
+
+  if (1 < 2) {
+    neo = require("./node-neo4j/lib/index.js");
+    db = new neo.GraphDatabase(url, auth);
+    print = function(err, res) {
+      return console.log(err || (res && res.self) || res);
+    };
+    node = db.createNode({
+      hello: 'world'
+    });
+    node.save(print);
+    node = db.getNodeById(1, print);
+    rel = db.getRelationshipById(1, print);
+  }
 
 }).call(this);
