@@ -1,5 +1,5 @@
 (function() {
-  var MyApp, connect, http, s;
+  var MyApp, connect, db, http, neo4j, node, print, rel, s;
 
   connect = require('connect');
 
@@ -32,5 +32,25 @@
   })();
 
   s = new MyApp();
+
+  console.log(process.env);
+
+  neo4j = require('neo4j');
+
+  db = new neo4j.GraphDatabase('http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006');
+
+  print = function(err, res) {
+    return console.log(err + (res && res.self) + res);
+  };
+
+  node = db.createNode({
+    hello: 'world'
+  });
+
+  node.save(print);
+
+  node = db.getNodeById(1, print);
+
+  rel = db.getRelationshipById(1, print);
 
 }).call(this);
