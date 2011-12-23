@@ -1,9 +1,19 @@
 (function() {
-  var MyApp, auth, connect, db, http, login, neo, node, pass, print, rel, s, url;
+  var MyApp, connect, db, http, login, neo, node, pass, print, s, url;
 
   connect = require('connect');
 
   http = require('http');
+
+  login = process.env.NEO4J_LOGIN || "81c130a01";
+
+  pass = process.env.NEO4J_PASSWORD || "4f382f810";
+
+  url = process.env.NEO4J_URL || 'http://856db9f68.hosted.neo4j.org:7006';
+
+  neo = require("./node-neo4j/lib/index.js");
+
+  db = new neo.GraphDatabase(url, login + ":" + pass);
 
   MyApp = (function() {
 
@@ -33,26 +43,17 @@
 
   s = new MyApp();
 
-  login = process.env.NEO4J_LOGIN || "81c130a01";
-
-  pass = process.env.NEO4J_PASSWORD || "4f382f810";
-
-  url = process.env.NEO4J_URL || 'http://856db9f68.hosted.neo4j.org:7006';
-
-  auth = login + ":" + pass;
-
   if (1 < 2) {
-    neo = require("./node-neo4j/lib/index.js");
-    db = new neo.GraphDatabase(url, auth);
     print = function(err, res) {
       return console.log(err || (res && res.self) || res);
     };
-    node = db.createNode({
-      hello: 'world'
+    node = db.getNodeById(1, function(err, node) {
+      console.log(node);
+      return node.index("id1", "hello", "world", function(err, id) {
+        console.log(err);
+        return console.id;
+      });
     });
-    node.save(print);
-    node = db.getNodeById(1, print);
-    rel = db.getRelationshipById(1, print);
   }
 
 }).call(this);

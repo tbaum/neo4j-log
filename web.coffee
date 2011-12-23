@@ -1,6 +1,15 @@
 connect = require 'connect'
 http = require('http')
 
+
+login = process.env.NEO4J_LOGIN || "81c130a01"
+pass = process.env.NEO4J_PASSWORD || "4f382f810"
+url = process.env.NEO4J_URL || 'http://856db9f68.hosted.neo4j.org:7006'
+
+neo = require ("./node-neo4j/lib/index.js")
+db = new neo.GraphDatabase(url, login + ":" + pass)
+
+
 class MyApp
 	constructor: ->
 		res = {}
@@ -30,10 +39,6 @@ s = new MyApp()
 
 # cread 81c130a01:4f382f810
 
-login = process.env.NEO4J_LOGIN || "81c130a01"
-pass = process.env.NEO4J_PASSWORD || "4f382f810"
-url = process.env.NEO4J_URL || 'http://856db9f68.hosted.neo4j.org:7006'
-auth = login + ":" + pass
 
 #request = require 'request'
 #res = request.get {url:url, headers:{Authorization: "Basic ODFjMTMwYTAxOjRmMzgyZjgxMA=="}} , (x,y,z) ->
@@ -44,16 +49,20 @@ auth = login + ":" + pass
 #console.log res.body
 
 if (1<2)
-	neo = require ("./node-neo4j/lib/index.js")
-	db = new neo.GraphDatabase(url,auth)
+
 	print = (err, res) ->
     	console.log(err || (res && res.self) || res);
 
-	node = db.createNode({hello: 'world'})
-	node.save(print)
+#	node = db.createNode({hello: 'world'})
+#	node.save(print)
 
-	node = db.getNodeById(1, print);
-	rel = db.getRelationshipById(1, print)
+	node = db.getNodeById 1, (err,node) ->
+		console.log node
+		node.index "id1","hello","world", (err,id) ->
+			console.log err
+			console.id
+
+#	rel = db.getRelationshipById(1, print)
 
 
 #_ = require "jquery"
