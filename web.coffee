@@ -67,8 +67,11 @@ s = new MyApp()
 
 try
 	nd = db.node({url:"more"})
-	nd.save().then (y)->
-		console.log
+	nd.save().then((y)->
+			console.log "saved"
+		,(x)->
+			console.log "error"+x
+			
 catch e
 	console.log e
 
