@@ -29,9 +29,13 @@
           res['headers'] = JSON.stringify(request.headers);
           res['url'] = request.url;
           res['originalUrl'] = request.originalUrl;
-          nd = db.node({
-            url: request.url
-          }).then(console.log, console.log);
+          try {
+            nd = db.node({
+              url: request.url
+            }).then(function(x) {});
+          } catch (e) {
+            res['xx'] = e;
+          }
           response.setHeader('Content-Type', 'image/gif');
           return response.end("\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00" + "\x00\x00\x00\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00\x00" + "\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3b", 'binary');
         });
