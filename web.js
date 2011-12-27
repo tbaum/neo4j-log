@@ -23,18 +23,19 @@
       res = {};
       app = connect(connect.query(), connect.router(function(app) {
         app.get('/l', function(request, response) {
-          var rel, req, root;
+          var db1, rel, req, root;
           res['query'] = request.query;
           res['header'] = JSON.stringify(request.header);
           res['headers'] = JSON.stringify(request.headers);
           res['url'] = request.url;
           res['originalUrl'] = request.originalUrl;
           try {
-            root = db.node(0);
-            req = db.node({
+            db1 = new neo.GraphDatabase(url);
+            root = db1.node(0);
+            req = db1.node({
               url: request.url
             });
-            rel = db.rel(root, "LOVES", req, {
+            rel = db1.rel(root, "LOVES", req, {
               "reason": "All the bling he got."
             });
             rel.getEndNode().then(function(bob) {

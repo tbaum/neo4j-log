@@ -37,9 +37,10 @@ class MyApp
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
 					try
-						root = db.node(0)
-						req = db.node({url:request.url})
-						rel = db.rel(root, "LOVES", req, { "reason" : "All the bling he got." })
+						db1 = new neo.GraphDatabase(url)
+						root = db1.node(0)
+						req = db1.node({url:request.url})
+						rel = db1.rel(root, "LOVES", req, { "reason" : "All the bling he got." })
 						rel.getEndNode().then (bob)->
 							console.log "DONE!"						
 #						nd.save().then (x)-> console.log("saved") 
