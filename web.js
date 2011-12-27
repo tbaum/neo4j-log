@@ -1,5 +1,5 @@
 (function() {
-  var MyApp, connect, db, e, http, neo, s, url;
+  var MyApp, connect, e, http, neo, s, url;
 
   connect = require('connect');
 
@@ -8,8 +8,6 @@
   http = require('http');
 
   url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006';
-
-  db = new neo.GraphDatabase(url);
 
   e = function(x, y, z) {
     console.log(x);
@@ -20,7 +18,8 @@
   MyApp = (function() {
 
     function MyApp() {
-      var app, res;
+      var app, db, res;
+      db = new neo.GraphDatabase(url);
       res = {};
       app = connect(connect.query(), connect.router(function(app) {
         app.get('/l', function(request, response) {

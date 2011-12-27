@@ -6,7 +6,6 @@ url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4
 
 # console.log url
 
-db = new neo.GraphDatabase(url)
 e = (x,y,z) ->
   console.log x
   console.log y
@@ -26,6 +25,7 @@ e = (x,y,z) ->
 
 class MyApp
 	constructor: ->
+		db = new neo.GraphDatabase(url)
 		res = {}
 		app = connect(
 			connect.query()
