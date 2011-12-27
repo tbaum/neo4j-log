@@ -45,7 +45,10 @@ class MyApp
 				app.get '/debug', (request, response) ->
 					response.end JSON.stringify(res)
 				app.get '/test', (request,response) ->
+					console.log "do test"
+					console.log db
 					nd = db.node({url:request.url}).then(console.log, console.log) 
+					console.log nd
 #					node = db.getNodeById 1, (err,node) ->
 #						console.log node
 #						node.index "id1","hello","world", (err,id) ->

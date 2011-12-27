@@ -40,9 +40,12 @@
         });
         return app.get('/test', function(request, response) {
           var nd;
+          console.log("do test");
+          console.log(db);
           nd = db.node({
             url: request.url
           }).then(console.log, console.log);
+          console.log(nd);
           return response.end("OK");
         });
       }), connect.static(__dirname + '/public'));
