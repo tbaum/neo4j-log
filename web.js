@@ -70,7 +70,9 @@
       url: "more"
     });
     nd.save().then(function(y) {
-      return console.log;
+      return console.log("saved");
+    }, function(x) {
+      return console.log("error" + x);
     });
   } catch (e) {
     console.log(e);
