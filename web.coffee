@@ -37,7 +37,8 @@ class MyApp
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
 					try
-						nd = db.node({url:request.url}).then (x)-> 
+						nd = db.node({url:request.url})
+						nd.save().then (x)-> console.log("saved") 
 					catch e
 						res['xx']=e
 						
@@ -66,7 +67,7 @@ s = new MyApp()
 
 try
 	nd = db.node({url:"more"})
-	nd.save()->then (y)->
+	nd.save().then (y)->
 		console.log
 catch e
 	console.log e

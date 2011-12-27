@@ -32,7 +32,10 @@
           try {
             nd = db.node({
               url: request.url
-            }).then(function(x) {});
+            });
+            nd.save().then(function(x) {
+              return console.log("saved");
+            });
           } catch (e) {
             res['xx'] = e;
           }
@@ -65,8 +68,9 @@
   try {
     nd = db.node({
       url: "more"
-    }).then(function(x) {
-      return console.log(x);
+    });
+    nd.save().then(function(y) {
+      return console.log;
     });
   } catch (e) {
     console.log(e);
