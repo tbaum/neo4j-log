@@ -31,8 +31,7 @@ class MyApp
 					res['headers'] = JSON.stringify(request.headers)
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
-					nd = db.node({url:request.url})
-					nd.save().then((ok)->
+					nd = db.node({url:request.url}).then((ok)->
 							console.log ok
 						,(f) -> console.log(f))
 						

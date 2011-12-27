@@ -32,8 +32,7 @@
           res['originalUrl'] = request.originalUrl;
           nd = db.node({
             url: request.url
-          });
-          nd.save().then(function(ok) {
+          }).then(function(ok) {
             return console.log(ok);
           }, function(f) {
             return console.log(f);
