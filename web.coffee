@@ -65,8 +65,9 @@ class MyApp
 s = new MyApp()
 
 try
-	nd = db.node({url:"more"}).then (x)-> 
-		console.log x
+	nd = db.node({url:"more"})
+	nd.save()->then (y)->
+		console.log
 catch e
 	console.log e
 
