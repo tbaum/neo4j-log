@@ -9,6 +9,8 @@
 
   url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006';
 
+  console.log(url);
+
   db = new neo.GraphDatabase(url);
 
   e = function(x, y, z) {
@@ -31,8 +33,9 @@
   					res['headers'] = JSON.stringify(request.headers)
   					res['url'] = request.url
   					res['originalUrl'] = request.originalUrl
-  					db.node({url:request.url}).then (ok)->
-  						console.log ok
+  					db.node({url:request.url}).then((ok)->
+  							console.log ok
+  						,(f) -> console.log(f))
   						
   					response.setHeader('Content-Type', 'image/gif');
   					response.end "\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00"+
