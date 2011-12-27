@@ -1,5 +1,5 @@
 connect = require 'connect'
-neo = require 'neo4js'
+neo = require './node-neo4js.js'
 http = require 'http'
 
 url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006'

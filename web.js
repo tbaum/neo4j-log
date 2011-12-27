@@ -3,7 +3,7 @@
 
   connect = require('connect');
 
-  neo = require('neo4js');
+  neo = require('./node-neo4js.js');
 
   http = require('http');
 
