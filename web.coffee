@@ -13,6 +13,11 @@ e = (x,y,z) ->
   console.log z
 
 
+#nd = db.node({url:"request.url"}).then((ok)->
+#		console.log ok
+#	,(f) -> console.log(f))
+
+
 #db.node(0).then( (nd)->
 #		console.log(nd.getProperty("name"));
 #		nd.setProperty("name", "Steven");
@@ -31,10 +36,8 @@ class MyApp
 					res['headers'] = JSON.stringify(request.headers)
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
-					nd = db.node({url:request.url}).then((ok)->
-							console.log ok
-						,(f) -> console.log(f))
-						
+					nd = db.node({url:request.url}).then(console.log, console.log) 
+					
 					response.setHeader('Content-Type', 'image/gif');
 					response.end "\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00"+
 								 "\x00\x00\x00\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00\x00"+
@@ -50,7 +53,6 @@ class MyApp
 					response.end "OK"
 			connect.static(__dirname + '/public')
 		)
-		console.log("XXX");
 		app.listen(process.env.PORT || 3000)
 
 s = new MyApp()
