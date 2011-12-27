@@ -4,10 +4,9 @@ http = require 'http'
 
 url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006'
 
-console.log url
+# console.log url
 
 db = new neo.GraphDatabase(url)
-
 e = (x,y,z) ->
   console.log x
   console.log y
@@ -20,7 +19,6 @@ e = (x,y,z) ->
 #		nd.save().then (s)->
 #			console.log("============>saved");
 
-###
 class MyApp
 	constructor: ->
 		res = {}
@@ -33,7 +31,8 @@ class MyApp
 					res['headers'] = JSON.stringify(request.headers)
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
-					db.node({url:request.url}).then((ok)->
+					nd = db.node({url:request.url})
+					nd.save().then((ok)->
 							console.log ok
 						,(f) -> console.log(f))
 						
@@ -52,10 +51,9 @@ class MyApp
 					response.end "OK"
 			connect.static(__dirname + '/public')
 		)
-
+		console.log("XXX");
 		app.listen(process.env.PORT || 3000)
 
 s = new MyApp()
 
-console.log process.env
-
+console.log "OKKKK"

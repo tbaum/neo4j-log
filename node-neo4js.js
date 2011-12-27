@@ -50,6 +50,7 @@ var $ = {
             var data;
             response.on('data', function (chunk) {
                 data = chunk;
+		        console.log(args.type + " " + args.url+" DATA");
             });
             response.on('end', function () {
                 try {
@@ -60,14 +61,19 @@ var $ = {
                 } catch (e) {
                     args.error(e);
                 }
+		        console.log(args.type + " " + args.url+ " END");
             });
 
         });
-        request.on('error', args.error);
+        request.on('error', function(e) {
+	       console.log(args.type + " " + args.url+" ERR");
+	   args.error(e)
+	});
         if (args.data != undefined && args.data != '') {
             request.write(args.data)
         }
         request.end();
+   //     console.log(args.type + " " + args.url+" RET");
     }
 };
 
