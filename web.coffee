@@ -1,15 +1,24 @@
 connect = require 'connect'
-http = require('http')
+neo = require 'neo4js'
+http = require 'http'
+
+url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006'
+
+db = new neo.GraphDatabase(url)
+
+e = (x,y,z) ->
+  console.log x
+  console.log y
+  console.log z
 
 
-login = process.env.NEO4J_LOGIN || "81c130a01"
-pass = process.env.NEO4J_PASSWORD || "4f382f810"
-url = process.env.NEO4J_URL || 'http://856db9f68.hosted.neo4j.org:7006'
+#db.node(0).then( (nd)->
+#		console.log(nd.getProperty("name"));
+#		nd.setProperty("name", "Steven");
+#		nd.save().then (s)->
+#			console.log("============>saved");
 
-neo = require ("./node-neo4j/lib/index.js")
-db = new neo.GraphDatabase(url, login + ":" + pass)
-
-
+###
 class MyApp
 	constructor: ->
 		res = {}
@@ -23,6 +32,9 @@ class MyApp
 					res['headers'] = JSON.stringify(request.headers)
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
+					db.node({url:request.url}).then (ok)->
+						console.log ok
+						
 					response.setHeader('Content-Type', 'image/gif');
 					response.end "\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00"+
 								 "\x00\x00\x00\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00\x00"+
@@ -86,4 +98,4 @@ if (1<2)
 #			console.log("saved")
 
 
-
+###

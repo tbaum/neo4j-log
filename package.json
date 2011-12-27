@@ -4,9 +4,6 @@
   "dependencies": {
     "connect": "1.8.5",
     "coffee-script": "1.2.0",
-    "http-status": "0.1.0",
-    "request": "2.1.x",
-    "streamline": "0.1.43"
-    
+    "neo4js": "0.0.1",
   }
 }
