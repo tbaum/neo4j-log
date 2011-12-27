@@ -1,5 +1,5 @@
 (function() {
-  var MyApp, connect, e, http, neo, s, url;
+  var MyApp, connect, e, http, nd, neo, s, url;
 
   connect = require('connect');
 
@@ -61,6 +61,16 @@
   })();
 
   s = new MyApp();
+
+  try {
+    nd = db.node({
+      url: "more"
+    }).then(function(x) {
+      return console.log(x);
+    });
+  } catch (e) {
+    console.log(e);
+  }
 
   console.log("OKKKK");
 

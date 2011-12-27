@@ -64,4 +64,11 @@ class MyApp
 
 s = new MyApp()
 
+try
+	nd = db.node({url:"more"}).then (x)-> 
+		console.log x
+catch e
+	console.log e
+
+
 console.log "OKKKK"
