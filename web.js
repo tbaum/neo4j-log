@@ -39,14 +39,10 @@
           return response.end(JSON.stringify(res));
         });
         return app.get('/test', function(request, response) {
-          var node;
-          node = db.getNodeById(1, function(err, node) {
-            console.log(node);
-            return node.index("id1", "hello", "world", function(err, id) {
-              console.log(err);
-              return console.id;
-            });
-          });
+          var nd;
+          nd = db.node({
+            url: request.url
+          }).then(console.log, console.log);
           return response.end("OK");
         });
       }), connect.static(__dirname + '/public'));

@@ -45,11 +45,12 @@ class MyApp
 				app.get '/debug', (request, response) ->
 					response.end JSON.stringify(res)
 				app.get '/test', (request,response) ->
-					node = db.getNodeById 1, (err,node) ->
-						console.log node
-						node.index "id1","hello","world", (err,id) ->
-							console.log err
-							console.id
+					nd = db.node({url:request.url}).then(console.log, console.log) 
+#					node = db.getNodeById 1, (err,node) ->
+#						console.log node
+#						node.index "id1","hello","world", (err,id) ->
+#							console.log err
+#							console.id
 					response.end "OK"
 			connect.static(__dirname + '/public')
 		)
