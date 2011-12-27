@@ -23,18 +23,22 @@
       res = {};
       app = connect(connect.query(), connect.router(function(app) {
         app.get('/l', function(request, response) {
-          var nd;
+          var rel, req, root;
           res['query'] = request.query;
           res['header'] = JSON.stringify(request.header);
           res['headers'] = JSON.stringify(request.headers);
           res['url'] = request.url;
           res['originalUrl'] = request.originalUrl;
           try {
-            nd = db.node({
+            root = db.node(0);
+            req = db.node({
               url: request.url
             });
-            nd.save().then(function(x) {
-              return console.log("saved");
+            rel = db.rel(root, "LOVES", req, {
+              "reason": "All the bling he got."
+            });
+            rel.getEndNode().then(function(bob) {
+              return console.log("DONE!");
             });
           } catch (e) {
             res['xx'] = e;

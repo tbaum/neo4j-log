@@ -37,8 +37,12 @@ class MyApp
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
 					try
-						nd = db.node({url:request.url})
-						nd.save().then (x)-> console.log("saved") 
+						root = db.node(0)
+						req = db.node({url:request.url})
+						rel = db.rel(root, "LOVES", req, { "reason" : "All the bling he got." })
+						rel.getEndNode().then (bob)->
+							console.log "DONE!"						
+#						nd.save().then (x)-> console.log("saved") 
 					catch e
 						res['xx']=e
 						
