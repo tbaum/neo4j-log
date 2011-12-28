@@ -1,5 +1,5 @@
 (function() {
-  var MyApp, connect, e, http, nd, neo, s, url;
+  var MyApp, connect, db, http, neo, s, url;
 
   connect = require('connect');
 
@@ -9,54 +9,35 @@
 
   url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006';
 
-  e = function(x, y, z) {
-    console.log(x);
-    console.log(y);
-    return console.log(z);
-  };
+  db = new neo.GraphDatabase(url);
 
   MyApp = (function() {
 
-    function MyApp() {
-      var app, db, res, root;
-      db = new neo.GraphDatabase(url);
-      root = db.node(0);
-      db.node({
-        url: "urll"
-      }).then(function(req, y, z) {
-        var rel;
-        console.log(req);
-        return rel = db.rel(root, "LOVES", req, {
-          reason: "All the bling he got."
-        }).then(function(x, y, z) {
-          console.log("xHHHHHHHHH");
-          console.log(x);
-          console.log(y);
-          return console.log(z);
-        });
-      });
+    function MyApp(db) {
+      var app, res;
+      this.db = db;
       res = {};
       app = connect(connect.query(), connect.router(function(app) {
         app.get('/l', function(request, response) {
-          var rel, req;
+          var rel, req, root;
           res['query'] = request.query;
           res['header'] = JSON.stringify(request.header);
           res['headers'] = JSON.stringify(request.headers);
           res['url'] = request.url;
           res['originalUrl'] = request.originalUrl;
           try {
-            root = db.node(0);
-            req = db.node({
+            root = this.db.node(0);
+            req = this.db.node({
               url: request.url
             });
-            rel = db.rel(root, "LOVES", req, {
+            rel = this.db.rel(root, "LOVES", req, {
               "reason": "All the bling he got."
             });
             rel.getEndNode().then(function(bob) {
-              return console.log("DONE!");
+              return console.log("DONE!" + bob);
             });
           } catch (e) {
-            res['xx'] = e;
+            console.log(e);
           }
           response.setHeader('Content-Type', 'image/gif');
           return response.end("\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00" + "\x00\x00\x00\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00\x00" + "\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3b", 'binary');
@@ -65,13 +46,6 @@
           return response.end(JSON.stringify(res));
         });
         return app.get('/test', function(request, response) {
-          var nd;
-          console.log("do test");
-          console.log(db);
-          nd = db.node({
-            url: request.url
-          }).then(console.log, console.log);
-          console.log(nd);
           return response.end("OK");
         });
       }), connect.static(__dirname + '/public'));
@@ -82,20 +56,7 @@
 
   })();
 
-  s = new MyApp();
-
-  try {
-    nd = db.node({
-      url: "more"
-    });
-    nd.save().then(function(y) {
-      return console.log("saved");
-    }, function(x) {
-      return console.log("error" + x);
-    });
-  } catch (e) {
-    console.log(e);
-  }
+  s = new MyApp(db);
 
   console.log("OKKKK");
 
