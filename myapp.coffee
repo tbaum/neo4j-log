@@ -10,6 +10,8 @@ class MyApp
     #-> {
     #  @db
     #}
+
+    console.log "r " + root
     app = connect(
       connect.query()
       connect.router((app) ->
