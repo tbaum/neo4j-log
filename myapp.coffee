@@ -17,7 +17,8 @@ class MyApp
             debug['originalUrl'] = req.originalUrl
             try
               console.log "okkkkk"
-              console.log "" + _db()
+              console.log "y " + _db
+              console.log "x " + _db()
               db = _db()
               root = db.node(0)
               req = db.node {url:req.url}
