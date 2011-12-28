@@ -13,9 +13,8 @@
 
   MyApp = (function() {
 
-    function MyApp(db) {
+    function MyApp() {
       var app, res;
-      this.db = db;
       res = {};
       app = connect(connect.query(), connect.router(function(app) {
         app.get('/l', function(request, response) {
@@ -26,11 +25,11 @@
           res['url'] = request.url;
           res['originalUrl'] = request.originalUrl;
           try {
-            root = this.db.node(0);
-            req = this.db.node({
+            root = db.node(0);
+            req = db.node({
               url: request.url
             });
-            rel = this.db.rel(root, "LOVES", req, {
+            rel = db.rel(root, "LOVES", req, {
               "reason": "All the bling he got."
             });
             rel.getEndNode().then(function(bob) {

@@ -26,7 +26,8 @@ url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4
 db = new neo.GraphDatabase(url)
 
 class MyApp
-	constructor: (@db)->
+	constructor: ->
+#		db = db
 #		root = db.node(0)
 #		console.log ""+root
 #		db.node({url:"urll"}).then (req,y,z) ->
@@ -59,9 +60,9 @@ class MyApp
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
 					try
-						root = @db.node(0)
-						req = @db.node({url:request.url})
-						rel = @db.rel(root, "LOVES", req, { "reason" : "All the bling he got." })
+						root = db.node(0)
+						req = db.node({url:request.url})
+						rel = db.rel(root, "LOVES", req, { "reason" : "All the bling he got." })
 						rel.getEndNode().then (bob)->
 							console.log "DONE!"+bob						
 #						nd.save().then (x)-> console.log("saved") 
