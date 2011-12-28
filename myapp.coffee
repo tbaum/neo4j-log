@@ -1,23 +1,9 @@
 connect = require 'connect'
 neo = require 'neo4js'
-#http = require 'http'
-
-url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006'
-
-db = new neo.GraphDatabase(url)
-
-make_url = (data)->
-  root = db.node(0)
-  req = db.node(data)
-  rel = db.rel(root, "LOVES", req, { "reason":"All the bling he got." })
-  rel.getEndNode().then(bob) ->
-    console.log "DONE!" + bob
-
-
-make_url {test:"data"}
 
 class MyApp
-  constructor:->
+  constructor:(url)->
+    db = new neo.GraphDatabase(url)
     debug = {}
     app = connect(
       connect.query()
@@ -48,17 +34,15 @@ class MyApp
     )
     app.listen(process.env.PORT || 3000)
 
-s = new MyApp(db)
+  make_url:(data)->
+    root = db.node(0)
+    req = db.node(data)
+    rel = db.rel(root, "LOVES", req, { "reason":"All the bling he got." })
+    rel.getEndNode().then(bob) ->
+      console.log "DONE!" + bob
 
-#try
-#	nd = db.node({url:"more"})
-#	nd.save().then((y)->
-#			console.log "saved"
-#		,(x)->
-#			console.log "error"+x
-#		)
-#catch e
-#	console.log e
-#
-#
-console.log "OKKKK"
+exports.start = (url)->
+  new MyApp url
+
+
+
