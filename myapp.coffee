@@ -1,17 +1,10 @@
 connect = require 'connect'
-neo = require 'neo4js'
 
-class MyApp
-  constructor:(url)->
-    db = new neo.GraphDatabase(url)
+module.exports = class MyApp
+  constructor:(@db)->
+    db = @db
     debug = {}
-    root = db.node(0)
-    #    @db = db
-    #-> {
-    #  @db
-    #}
 
-    console.log "r " + root
     app = connect(
       connect.query()
       connect.router((app) ->
@@ -21,21 +14,12 @@ class MyApp
             debug['headers'] = JSON.stringify(req.headers)
             debug['url'] = req.url
             debug['originalUrl'] = req.originalUrl
-            try
-              console.log "this: "
-              console.log db
-              console.log "y "
-              console.log root
-              console.log "y "
-              console.log db.node(0)
-              #console.log "x " + _db()
-              #db = _db()
-              #req = db.node {url:req.url}
-              #rel = db.rel(root, "LOVES", req, { "reason":"All the bling he got." })
-              #rel.getEndNode().then(bob) ->
-              #  console.log "DONE!" + bob
-            catch e
-              console.log e
+
+            root = db.node(0)
+            req = db.node {url:req.url}
+            rel = db.rel(root, "LOVES", req, { "reason":"All the bling he got." })
+            rel.getEndNode().then(bob) ->
+              console.log "DONE!" + bob
 
             res.setHeader('Content-Type', 'image/gif')
             res.end "\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00" +
@@ -51,17 +35,4 @@ class MyApp
       connect.static(__dirname + '/public')
     )
     app.listen(process.env.PORT || 3000)
-
-  make_url:(data)->
-    console.log "make_url"
-    root = db.node(0)
-    req = db.node(data)
-    rel = db.rel(root, "LOVES", req, { "reason":"All the bling he got." })
-    rel.getEndNode().then(bob) ->
-      console.log "DONE!" + bob
-
-exports.start = (url)->
-  new MyApp url
-
-
 
