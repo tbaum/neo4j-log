@@ -1,6 +1,6 @@
 require('coffee-script');
 
-var url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006';
+var url = process.env.NEO4J_URL || 'http://763e55420:7730ee0cf@e0556e429.hosted.neo4j.org:7006';
 var neo = require('neo4js');
 
 var db = new neo.GraphDatabase(url);

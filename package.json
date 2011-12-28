@@ -4,6 +4,6 @@
     "dependencies":{
         "connect":"1.8.5",
         "coffee-script":"1.2.0",
-        "neo4js":"0.0.3"
+        "neo4js":"0.0.4"
     }
 }
