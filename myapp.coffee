@@ -22,7 +22,7 @@ class MyApp
             debug['url'] = req.url
             debug['originalUrl'] = req.originalUrl
             try
-              console.log "this: " + @db
+              console.log "this: " + db
               console.log "y " + root
               console.log "y " + db.node(0)
               #console.log "x " + _db()
