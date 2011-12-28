@@ -4,7 +4,7 @@
   "dependencies": {
     "connect": "1.8.5",
     "coffee-script": "1.2.0",
-    "neo4js": "0.0.2",
+    "neo4js": "0.0.3",
     "underscore":"1.2.3"
   }
 }
