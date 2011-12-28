@@ -33,32 +33,38 @@ var $ = {
             host:url.hostname,
             port:url.port,
             path:url.path,
-            method:args.type
+            method:args.type,
+			headers:{"Content-type":"application/json"}
         };
 
         if (url.auth) {
             var auth = new Buffer(url.auth, "ascii").toString("base64");
             $._auth_cache[url.hostname] = auth;
-            opts.headers = { Authorization:"Basic " + auth}
+            opts.headers['Authorization'] = "Basic " + auth;
         }
         else if ($._auth_cache[url.hostname]) {  // TODO fix this!!
-            opts.headers = { Authorization:"Basic " + $._auth_cache[url.hostname]}
+            opts.headers['Authorization'] = "Basic " + $._auth_cache[url.hostname];
         }
 
         var request = Http.request(opts, function (response) {
             response.setEncoding('utf8');
-            var data;
+            var data = "";
             response.on('data', function (chunk) {
-                data = chunk;
-		        console.log(args.type + " " + args.url+" DATA");
+                data += chunk;
+//		        console.log(args.type + " " + args.url+" DATA " + chunk);
             });
             response.on('end', function () {
                 try {
-                    if (args.processData) {
+				     if (args.processData) {
                         data = JSON.parse(data);
                     }
-                    args.success(data, response.statusCode, {xhr:1});
+                    args.success(data, response.statusCode, {xhr:4});
                 } catch (e) {
+console.log("EE");
+console.log(args)
+console.log(""+args.success)
+console.log(data);
+	console.log(e);
                     args.error(e);
                 }
 		        console.log(args.type + " " + args.url+ " END");
@@ -69,14 +75,169 @@ var $ = {
 	       console.log(args.type + " " + args.url+" ERR");
 	   args.error(e)
 	});
+
         if (args.data != undefined && args.data != '') {
+	        console.log(args.type + " " + args.url+" send:"+args.data);
             request.write(args.data)
         }
+
         request.end();
-   //     console.log(args.type + " " + args.url+" RET");
+        console.log(args.type + " " + args.url+" RET");
     }
 };
 
+
+neo4j={}
+
+neo4j.jqueryWebProvider = {
+ _auth_cache:{},
+    /**
+	 * Ajax call implementation.
+	 */
+    ajax : function(args) {
+        console.log(args)
+
+
+
+
+		        var url = Url.parse(args.url);
+		        console.log(args.method + " " + args.url);
+
+		        var opts = {
+		            host:url.hostname,
+		            port:url.port,
+		            path:url.path,
+		            method:args.method,
+					headers:{"Content-type":"application/json"}
+		        };
+
+		        if (url.auth) {
+		            var auth = new Buffer(url.auth, "ascii").toString("base64");
+		            neo4j.jqueryWebProvider._auth_cache[url.hostname] = auth;
+		            opts.headers['Authorization'] = "Basic " + auth;
+		        }
+		        else if (neo4j.jqueryWebProvider._auth_cache[url.hostname]) {  // TODO fix this!!
+		            opts.headers['Authorization'] = "Basic " + neo4j.jqueryWebProvider._auth_cache[url.hostname];
+		        }
+
+		        var request = Http.request(opts, function (response) {
+		            response.setEncoding('utf8');
+		            var data = "";
+		            response.on('data', function (chunk) {
+		                data += chunk;
+		//		        console.log(args.type + " " + args.url+" DATA " + chunk);
+		            });
+		            response.on('end', function () {
+		                try {
+						     if (args.method === "GET") {
+		                        data = JSON.parse(data);
+		                    }
+		console.log(data);
+		                    args.success(data, response.statusCode);
+		                } catch (e) {
+		console.log("EE");
+		console.log(args)
+		console.log(""+args.success)
+		console.log(data);
+			console.log(e);
+		                    args.error(e);
+		                }
+				        console.log(args.method + " " + args.url+ " END");
+		            });
+
+		        });
+		        request.on('error', function(e) {
+			       console.log(args.type + " " + args.url+" ERR");
+			   args.error(e)
+			});
+
+		        if (args.data != undefined && args.data != null && args.data != '') {
+			        console.log(args.method + " " + args.url+" send:"+args.data);
+		            request.write(JSON.stringify( args.data))
+		        }
+
+		        request.end();
+		        console.log(args.method + " " + args.url+" RET");
+		
+		
+		/*
+        var timeout = args.timeout || 6 * 60 * 60 * 1000,
+            method = args.method,
+            url = args.url,
+            data = args.data,
+            success = args.success,
+            failure = args.failure,
+            isGetRequest = method === "GET";
+        
+      
+        
+        function errorHandler(req) {
+            try {
+                if (req.status === 200)
+                {
+                    // This happens when the
+                    // server returns an
+                    // empty response.
+                    return success(null);
+                }
+            } catch (e) {
+                // We end up here if there
+                // is no status to read
+            }
+            try
+            {
+            	if( req.status === 0 ) {
+            	    failure(new neo4j.exceptions.ConnectionLostException());
+            	} else {
+                  var error = JSON.parse(req.responseText);
+                  failure(new neo4j.exceptions.HttpException(req.status, error, req));
+            	}
+            } catch (e)
+            {
+                failure(new neo4j.exceptions.HttpException(-1, {}, req));
+            }
+	    }
+
+        (function(method, url, data, success, failure) {
+
+            if (data === null || data === "null")
+            {
+                data = "";
+            } else if(!isGetRequest)
+            {
+                data = JSON.stringify(data);
+            }
+
+            if (isCrossDomain(url) && window.XDomainRequest)
+            {
+                // IE8 Cross domain
+                // TODO
+                if (typeof (failure) === "function")
+                {
+                    failure(new neo4j.exceptions.HttpException(-1, null, null, "Cross-domain requests are available in IE, but are not yet implemented in neo4js."));
+                }
+            } else
+            {
+            	$.ajax({
+                    url : url,
+                    type : method,
+                    data : data,
+                    timeout: timeout,
+                    cache: false,
+                    // Let jquery turn data map into query string
+                    // only on GET requests.
+                    processData : isGetRequest, 
+                    success : success,
+                    contentType : "application/json",
+                    error : errorHandler,
+                    dataType : "json"
+                });
+            }
+        })(method, url, data, success, failure);
+   */
+ }
+
+};
 
 /*
  * Copyright (c) 2002-2011 "Neo Technology,"
@@ -921,115 +1082,7 @@ neo4j.events = new neo4j.Events()
  * 
  * @namespace
  */
-neo4j.jqueryWebProvider = {
 
-    /**
-	 * Ajax call implementation.
-	 */
-    ajax : function(args) {
-        
-        var timeout = args.timeout || 6 * 60 * 60 * 1000,
-            method = args.method,
-            url = args.url,
-            data = args.data,
-            success = args.success,
-            failure = args.failure,
-            isGetRequest = method === "GET";
-        
-        function successHandler(data, status, xhr) {
-            if ( xhr.status === 0 ) {
-                errorHandler(xhr);
-            } else {
-                success.apply(this, arguments);
-            }
-        }
-        
-        function errorHandler(req) {
-            try {
-                if (req.status === 200)
-                {
-                    // This happens when the
-                    // server returns an
-                    // empty response.
-                    return success(null);
-                }
-            } catch (e) {
-                // We end up here if there
-                // is no status to read
-            }
-            try
-            {
-            	if( req.status === 0 ) {
-            	    failure(new neo4j.exceptions.ConnectionLostException());
-            	} else {
-                  var error = JSON.parse(req.responseText);
-                  failure(new neo4j.exceptions.HttpException(req.status, error, req));
-            	}
-            } catch (e)
-            {
-                failure(new neo4j.exceptions.HttpException(-1, {}, req));
-            }
-	    }
-
-	    var isCrossDomain = this.isCrossDomain;
-        (function(method, url, data, success, failure) {
-
-            if (data === null || data === "null")
-            {
-                data = "";
-            } else if(!isGetRequest)
-            {
-                data = JSON.stringify(data);
-            }
-
-            if (isCrossDomain(url) && window.XDomainRequest)
-            {
-                // IE8 Cross domain
-                // TODO
-                if (typeof (failure) === "function")
-                {
-                    failure(new neo4j.exceptions.HttpException(-1, null, null, "Cross-domain requests are available in IE, but are not yet implemented in neo4js."));
-                }
-            } else
-            {
-            	$.ajax({
-                    url : url,
-                    type : method,
-                    data : data,
-                    timeout: timeout,
-                    cache: false,
-                    // Let jquery turn data map into query string
-                    // only on GET requests.
-                    processData : isGetRequest, 
-                    success : successHandler,
-                    contentType : "application/json",
-                    error : errorHandler,
-                    dataType : "json"
-                });
-            }
-        })(method, url, data, success, failure);
-    },
-
-    /**
-	 * Check if a url is cross-domain from the current window.location url.
-	 */
-    isCrossDomain : function(url) {
-        if (url)
-        {
-            var httpIndex = url.indexOf("://");
-            if (httpIndex === -1 || httpIndex > 7)
-            {
-                return false;
-            } else
-            {
-                return url.substring(httpIndex + 3).split("/", 1)[0] !== window.location.host;
-            }
-        } else
-        {
-            return false;
-        }
-    }
-};
 
 /**
  * Interface to jQuery AJAX library. This is here to enable a fairly simple

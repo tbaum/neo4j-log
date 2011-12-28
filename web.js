@@ -3,7 +3,7 @@
 
   connect = require('connect');
 
-  neo = require('./node-neo4js.js');
+  neo = require('neo4js');
 
   http = require('http');
 
@@ -18,24 +18,38 @@
   MyApp = (function() {
 
     function MyApp() {
-      var app, db, res;
+      var app, db, res, root;
       db = new neo.GraphDatabase(url);
+      root = db.node(0);
+      db.node({
+        url: "urll"
+      }).then(function(req, y, z) {
+        var rel;
+        console.log(req);
+        return rel = db.rel(root, "LOVES", req, {
+          reason: "All the bling he got."
+        }).then(function(x, y, z) {
+          console.log("xHHHHHHHHH");
+          console.log(x);
+          console.log(y);
+          return console.log(z);
+        });
+      });
       res = {};
       app = connect(connect.query(), connect.router(function(app) {
         app.get('/l', function(request, response) {
-          var db1, rel, req, root;
+          var rel, req;
           res['query'] = request.query;
           res['header'] = JSON.stringify(request.header);
           res['headers'] = JSON.stringify(request.headers);
           res['url'] = request.url;
           res['originalUrl'] = request.originalUrl;
           try {
-            db1 = new neo.GraphDatabase(url);
-            root = db1.node(0);
-            req = db1.node({
+            root = db.node(0);
+            req = db.node({
               url: request.url
             });
-            rel = db1.rel(root, "LOVES", req, {
+            rel = db.rel(root, "LOVES", req, {
               "reason": "All the bling he got."
             });
             rel.getEndNode().then(function(bob) {

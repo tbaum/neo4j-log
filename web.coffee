@@ -1,5 +1,5 @@
 connect = require 'connect'
-neo = require './node-neo4js.js'
+neo = require 'neo4js'
 http = require 'http'
 
 url = process.env.NEO4J_URL || 'http://81c130a01:4f382f810@856db9f68.hosted.neo4j.org:7006'
@@ -26,6 +26,31 @@ e = (x,y,z) ->
 class MyApp
 	constructor: ->
 		db = new neo.GraphDatabase(url)
+
+		root = db.node(0)
+#		console.log ""+root
+		db.node({url:"urll"}).then (req,y,z) ->
+#			console.log "HHHHHHHHH"
+			console.log req
+#			console.log y
+#			console.log z
+#		console.log ""+req
+			rel = db.rel(root, "LOVES", req, { reason : "All the bling he got." }).then (x,y,z)->
+				console.log "xHHHHHHHHH"
+				console.log x
+				console.log y
+				console.log z
+				
+#		   console.log x
+#		   console.log y
+#		   console.log z
+		
+#		console.log rel
+#		rel.getEndNode().then (bob)->
+#			console.log "DONE!"						
+
+
+
 		res = {}
 		app = connect(
 			connect.query()
@@ -37,10 +62,9 @@ class MyApp
 					res['url'] = request.url
 					res['originalUrl'] = request.originalUrl
 					try
-						db1 = new neo.GraphDatabase(url)
-						root = db1.node(0)
-						req = db1.node({url:request.url})
-						rel = db1.rel(root, "LOVES", req, { "reason" : "All the bling he got." })
+						root = db.node(0)
+						req = db.node({url:request.url})
+						rel = db.rel(root, "LOVES", req, { "reason" : "All the bling he got." })
 						rel.getEndNode().then (bob)->
 							console.log "DONE!"						
 #						nd.save().then (x)-> console.log("saved") 
